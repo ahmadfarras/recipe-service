@@ -15,6 +15,7 @@ class ApiKeySeeder(val apiKeyRepository: ApiKeyRepository) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments?) {
         if(!apiKeyRepository.existsById(apiKey)){
+            apiKeyRepository.deleteAll()
             val entity = ApiKey(id = apiKey)
             apiKeyRepository.save(entity)
         }
