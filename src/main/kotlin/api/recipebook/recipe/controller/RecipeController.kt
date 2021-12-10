@@ -70,7 +70,7 @@ class RecipeController(val recipeService: RecipeService) {
         value = ["/api/recipe"],
         produces = ["application/json"]
     )
-    fun list(@RequestParam(value = "size", defaultValue = "10") size: Int, @RequestParam(value = "page", defaultValue = "0") page: Int) : WebResponse<List<RecipeResponse>>{
+    fun list(@RequestParam(value = "size", defaultValue = "10") size: Int, @RequestParam(value = "page", defaultValue = "0") page: Int) : WebResponse<ListRecipeResponse<RecipeResponse>>{
         val request = ListRecipeRequest(size, page)
         val recipeResponse = recipeService.list(request)
 

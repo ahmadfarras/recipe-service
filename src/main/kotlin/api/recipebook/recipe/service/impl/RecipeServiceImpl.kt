@@ -2,10 +2,7 @@ package api.recipebook.recipe.service.impl
 
 import api.recipebook.recipe.entity.Recipe
 import api.recipebook.recipe.error.NotFoundException
-import api.recipebook.recipe.payload.CreateRecipeRequest
-import api.recipebook.recipe.payload.ListRecipeRequest
-import api.recipebook.recipe.payload.RecipeResponse
-import api.recipebook.recipe.payload.UpdateRecipeRequest
+import api.recipebook.recipe.payload.*
 import api.recipebook.recipe.repository.RecipeRepository
 import api.recipebook.recipe.service.RecipeService
 import api.recipebook.recipe.utility.GeneralUtil
@@ -45,12 +42,11 @@ class RecipeServiceImpl(
         return convertDataRecipe(recipe)
     }
 
-    override fun list(listRecipeRequest: ListRecipeRequest): List<RecipeResponse> {
+    override fun list(listRecipeRequest: ListRecipeRequest): ListRecipeResponse<RecipeResponse> {
         val page = recipeRepository.findAll(PageRequest.of(listRecipeRequest.page, listRecipeRequest.size))
         val recipe : List<Recipe> = page.get().collect(Collectors.toList())
-        return recipe.map { convertDataRecipe(it) }
+        return ListRecipeResponse(listRecipeRequest.page, page.totalPages, page.totalElements, recipe.map { convertDataRecipe(it) })
     }
-
 
     override fun update(id: String, updateRecipeRequest: UpdateRecipeRequest): RecipeResponse {
         validationUtil.validate(updateRecipeRequest)
