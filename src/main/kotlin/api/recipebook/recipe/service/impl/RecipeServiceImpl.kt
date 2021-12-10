@@ -10,6 +10,7 @@ import api.recipebook.recipe.utility.ValidationUtil
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.stream.Collectors
@@ -20,6 +21,8 @@ class RecipeServiceImpl(
     val validationUtil: ValidationUtil,
     val generalUtil: GeneralUtil
     ) : RecipeService {
+
+    @Transactional
     override fun create(createRecipeRequest: CreateRecipeRequest): RecipeResponse {
         validationUtil.validate(createRecipeRequest)
 
@@ -48,6 +51,7 @@ class RecipeServiceImpl(
         return ListRecipeResponse(listRecipeRequest.page, page.totalPages, page.totalElements, recipe.map { convertDataRecipe(it) })
     }
 
+    @Transactional
     override fun update(id: String, updateRecipeRequest: UpdateRecipeRequest): RecipeResponse {
         validationUtil.validate(updateRecipeRequest)
 
@@ -65,6 +69,7 @@ class RecipeServiceImpl(
 
     }
 
+    @Transactional
     override fun delete(id: String) {
         val recipe = findProductByIdOrThrowNotFound(id)
 
